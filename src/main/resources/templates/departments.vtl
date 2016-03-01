@@ -1,0 +1,16 @@
+<h1>Department list!</h1>
+
+<p>Add a new department:</p>
+
+<form action="/departments" method="post">
+  <label for="name">Department Name</label>
+  <input id="name" name="name" type="text" required>
+
+  <button type="submit">Add department</button>
+</form>
+
+#foreach ($department in $departments)
+  <li><a href="/departments/$department.getId()">$department.getName()</a></li>
+#end
+
+<p><a href='/'>Home</a></p>

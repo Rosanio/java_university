@@ -1,0 +1,26 @@
+<h1>Student list!</h1>
+
+<p>Add a new student:</p>
+
+<form action="/students" method="post">
+  <label for="name">Student Name</label>
+  <input id="description" name="description" type="text">
+
+  <label for="enrollment">enrollment date</label>
+  <input id="enrollment" name="enrollment" type="text">
+
+  <label for="major">Student Major</label>
+  <select id="major" name="major">
+  #foreach($department in $departments)
+    <option value="$department.getId()">$department.getName()</option>
+  #end
+  </select>
+
+  <button type="submit">Add student</button>
+</form>
+
+#foreach ($student in $students)
+  <li><a href="/students/$student.getId()">$student.getName()</a></li>
+#end
+
+<p><a href='/'>Home</a></p>

@@ -1,0 +1,26 @@
+<h1>Course list!</h1>
+
+<p>Add a new course:</p>
+
+<form action="/courses" method="post">
+  <label for="name">Course Name</label>
+  <input id="name" name="name" type="text" required>
+
+  <label for="courseNumber">Course Number</label>
+  <input id="courseNumber" name="courseNumber" type="number" required>
+
+  <label for="department">Department Filed Under</label>
+  <select id="department" name="department">
+  #foreach($department in $departments)
+    <option value="$department.getId()">$department.getName()</option>
+  #end
+  </select>
+
+  <button type="submit">Add course</button>
+</form>
+
+#foreach ($course in $courses)
+  <li><a href="/courses/$course.getId()">$course.getName()</a></li>
+#end
+
+<p><a href='/'>Home</a></p>

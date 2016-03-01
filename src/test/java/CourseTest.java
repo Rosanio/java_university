@@ -14,14 +14,14 @@ public class CourseTest {
 
   @Test
   public void equals_returnsTrueIfDescriptionsAretheSame() {
-    Course firstCourse = new Course("HIST", 101);
-    Course secondCourse = new Course("HIST", 101);
+    Course firstCourse = new Course("HIST", 101, 1);
+    Course secondCourse = new Course("HIST", 101, 1);
     assertTrue(firstCourse.equals(secondCourse));
   }
 
   @Test
   public void save_savesObjectIntoDatabase() {
-    Course myCourse = new Course("HIST", 101);
+    Course myCourse = new Course("HIST", 101, 1);
     myCourse.save();
     Course savedCourse = Course.all().get(0);
     assertTrue(savedCourse.equals(myCourse));
@@ -29,7 +29,7 @@ public class CourseTest {
 
   @Test
   public void save_assignsIdToObject() {
-    Course myCourse = new Course("HIST", 101);
+    Course myCourse = new Course("HIST", 101, 1);
     myCourse.save();
     Course savedCourse = Course.all().get(0);
     assertEquals(myCourse.getId(), savedCourse.getId());
@@ -37,47 +37,56 @@ public class CourseTest {
 
   @Test
   public void find_findsCourseInDatabase_true() {
-    Course myCourse = new Course("HIST", 101);
+    Course myCourse = new Course("HIST", 101, 1);
     myCourse.save();
     Course savedCourse = Course.find(myCourse.getId());
     assertTrue(myCourse.equals(savedCourse));
   }
-  // @Test
-  // public void addCategory_addsCategoryToCourse() {
-  //   Category myCategory = new Category("Household chores");
-  //   myCategory.save();
-  //
-  //   Course myCourse = new Course("HIST", 101);
-  //   myCourse.save();
-  //
-  //   myCourse.addCategory(myCategory);
-  //   Category savedCategory = myCourse.getCategories().get(0);
-  //   assertTrue(myCategory.equals(savedCategory));
-  // }
+  @Test
+  public void addStudent_addsStudentToCourse() {
+    Student myStudent = new Student("John", "12-23-2015", "History");
+    myStudent.save();
 
-  // @Test
-  // public void getCategories_returnsAllCategories_ArrayList() {
-  //   Category myCategory = new Category("Household chores");
-  //   myCategory.save();
-  //
-  //   Course myCourse = new Course("HIST", 101);
-  //   myCourse.save();
-  //
-  //   myCourse.addCategory(myCategory);
-  //   List savedCategories = myCourse.getCategories();
-  //   assertEquals(savedCategories.size(), 1);
-  // }
+    Course myCourse = new Course("HIST", 101, 1);
+    myCourse.save();
 
-  // @Test
-  // public void delete_deletesAllCoursesAndListsAssoicationes() {
-  //   Category myCategory = new Category("Household chores");
-  //   myCategory.save();
-  //
-  //   Course myCourse = new Course("HIST", 101);
-  //   myCourse.save();
-  //
-  //   myCourse.addCategory(myCategory);
-  //   myCourse.delete();
-  //   assertEquals(myCategory.getCourses().size(), 0);
-  // }
+    myCourse.addStudent(myStudent);
+    Student savedStudent = myCourse.getStudents().get(0);
+    assertTrue(myStudent.equals(savedStudent));
+  }
+
+  @Test
+  public void getStudents_returnsAllStudents_ArrayList() {
+    Student myStudent = new Student("John", "12-23-2015", "History");
+    myStudent.save();
+
+    Course myCourse = new Course("HIST", 101, 1);
+    myCourse.save();
+
+    myCourse.addStudent(myStudent);
+    List savedStudents = myCourse.getStudents();
+    assertEquals(savedStudents.size(), 1);
+  }
+
+  @Test
+  public void update_updatesCourseNameAndNumber() {
+    Course myCourse = new Course("HIST", 101, 1);
+    myCourse.save();
+    myCourse.update("BUSI", 102);
+    assertEquals(Course.all().get(0).getName(), "BUSI");
+    assertEquals(Course.all().get(0).getCourseNumber(), 102);
+  }
+
+  @Test
+  public void delete_deletesAllCoursesAndListsAssoicationes() {
+    Student myStudent = new Student("Matt", "2010-08-15", "History");
+    myStudent.save();
+
+    Course myCourse = new Course("HIST", 101, 1);
+    myCourse.save();
+
+    myCourse.addStudent(myStudent);
+    myCourse.delete();
+    assertEquals(myStudent.getCourses().size(), 0);
+  }
 }
