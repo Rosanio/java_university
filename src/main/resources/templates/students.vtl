@@ -4,15 +4,15 @@
 
 <form action="/students" method="post">
   <label for="name">Student Name</label>
-  <input id="description" name="description" type="text">
+  <input id="name" name="name" type="text">
 
   <label for="enrollment">enrollment date</label>
-  <input id="enrollment" name="enrollment" type="text">
+  <input id="enrollment" name="enrollment" type="date">
 
   <label for="major">Student Major</label>
   <select id="major" name="major">
   #foreach($department in $departments)
-    <option value="$department.getId()">$department.getName()</option>
+    <option value="$department.getName()">$department.getName()</option>
   #end
   </select>
 

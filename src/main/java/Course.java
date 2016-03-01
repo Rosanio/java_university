@@ -23,7 +23,7 @@ public class Course {
     return department_id;
   }
 
-  public Course(String name, int course_number, int deparment_id) {
+  public Course(String name, int course_number, int department_id) {
     this.name = name;
     this.course_number = course_number;
     this.department_id = department_id;
@@ -66,6 +66,15 @@ public class Course {
         .addParameter("id", id)
         .executeAndFetchFirst(Course.class);
       return course;
+    }
+  }
+
+  public Department getDepartment() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM departments WHERE id = :department_id";
+      return con.createQuery(sql)
+        .addParameter("department_id", department_id)
+        .executeAndFetchFirst(Department.class);
     }
   }
 

@@ -97,6 +97,15 @@ public class Student {
     }
   }
 
+  public Department getDepartment() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM departments WHERE name = :major";
+      return con.createQuery(sql)
+        .addParameter("major", major)
+        .executeAndFetchFirst(Department.class);
+    }
+  }
+
   public void update(String name, String major) {
     try(Connection con = DB.sql2o.open()) {
       String sql = "UPDATE students SET name = :name, major = :major WHERE id = :id";

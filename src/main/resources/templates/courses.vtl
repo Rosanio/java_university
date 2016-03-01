@@ -9,8 +9,8 @@
   <label for="courseNumber">Course Number</label>
   <input id="courseNumber" name="courseNumber" type="number" required>
 
-  <label for="department">Department Filed Under</label>
-  <select id="department" name="department">
+  <label for="departmentId">Department Filed Under</label>
+  <select id="departmentId" name="departmentId">
   #foreach($department in $departments)
     <option value="$department.getId()">$department.getName()</option>
   #end

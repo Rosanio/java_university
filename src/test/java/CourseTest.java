@@ -89,4 +89,15 @@ public class CourseTest {
     myCourse.delete();
     assertEquals(myStudent.getCourses().size(), 0);
   }
+
+  @Test
+  public void getDepartment_returnsDepartmentOfCourse() {
+    Department department = new Department("History");
+    department.save();
+
+    Course course = new Course("HIST", 101, department.getId());
+    course.save();
+
+    assertTrue(course.getDepartment().equals(department));
+  }
 }

@@ -1,0 +1,24 @@
+<h1>$department.getName()</h1>
+
+<div class="row">
+  <div class="col-md-6">
+    #if($department.getStudents())
+      <p> $department.getName() majors:</p>
+      <ul>
+        #foreach($student in $department.getStudents())
+          <li><a href="/students/$student.getId()">$student.getName()</a></li>
+        #end
+      </ul>
+    #end
+  </div>
+  <div class="col-md-6">
+    #if($department.getCourses())
+      <p> $department.getName() courses:</p>
+      <ul>
+        #foreach($course in $department.getCourses())
+          <li><a href="/courses/$course.getId()">$course.getName()</a></li>
+        #end
+      </ul>
+    #end
+  </div>
+</div>
