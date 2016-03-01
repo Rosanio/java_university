@@ -2,22 +2,42 @@
 
 <h4>Major: <a href="/departments/$department.getId()">$department.getName()</a></h4>
 
-#if($student.getCourses())
-  <p>Here are the courses for this student:</p>
-  <ul>
-    #foreach($course in $student.getCourses())
-      #if($student.completed($course))
-      <li><a href="/courses/$course.getId()"><s>$course.getName()</s></a></li>
-      #else
-      <li><a href="/courses/$course.getId()">$course.getName()</a>
-        <form action="/students/$student.getId()/complete" method="post">
-          <input id="course_id" name="course_id" type="hidden" value="$course.getId()">
-          <button type="submit" class="btn btn-default">Mark as Complete</button>
-        </form></li>
-      #end
+<div class="row">
+  <div class="col-md-6">
+    #if($student.getCourses())
+      <p>Here are the courses not completed for this student:</p>
+      <ul>
+        #foreach($course in $student.getCourses())
+          #if(!$student.completed($course))
+
+          <li><a href="/courses/$course.getId()">$course.getName()</a>
+            <form action="/students/$student.getId()/complete" method="post">
+              <input id="course_id" name="course_id" type="hidden" value="$course.getId()">
+              <button type="submit" class="btn btn-default">Mark as Complete</button>
+            </form></li>
+          #end
+        #end
+      </ul>
     #end
-  </ul>
-#end
+  </div>
+
+  <div class="col-md-6">
+    #if($student.getCourses())
+      <p> Here are the courses this student has completed </p>
+      <ul>
+        #foreach($course in $student.getCourses())
+          #if($student.completed($course))
+
+            <li><a href="/courses/$course.getId()">$course.getName()</a></li>
+          #end
+        #end
+      </ul>
+    #end
+
+  </div>
+</div>
+
+<!--below column divs-->
 
 <h4>Enroll for a course:</h4>
 
@@ -31,6 +51,23 @@
     </select>
     <button type='submit'>Add course</button>
 </form>
+<br></br>
+#if($departments.size() > 1)
+<form action="/students/$student.getId()/changeMajor" method="post">
+  <input id="studentName" name="studentName" type="hidden" value="$student.getName()">
+  <label for="updateMajor">Change Majors</label>
+  <select name="updateMajor">
+    #foreach($departmentt in $departments)
+    #if(!($department.equals($departmentt)))
+    <option value="$departmentt.getName()">$departmentt.getName()</option>
+    #end
+    #end
+  </select>
+  <button type="submit" class="btn btn-primary">Go!</button>
+</form>
+
+<br></br>
+#end
 
 <form action='/students/$student.getId()/delete' method='post'>
   <button type='submit'>Delete student</button>

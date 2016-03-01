@@ -55,7 +55,6 @@ public class App {
       HashMap<String, Object> model = new HashMap<String, Object>();
       String name = request.queryParams("name");
       int courseNumber = Integer.parseInt(request.queryParams("courseNumber"));
-      System.out.println(Integer.parseInt(request.queryParams("departmentId")));
       int department = Integer.parseInt(request.queryParams("departmentId"));
       Course newCourse = new Course(name, courseNumber, department);
       newCourse.save();
@@ -78,6 +77,7 @@ public class App {
       Student student = Student.find(id);
       model.put("student", student);
       model.put("department", student.getDepartment());
+      model.put("departments", Department.all());
       model.put("courses", Course.all());
       model.put("template", "templates/student.vtl");
       return new ModelAndView(model, layout);
@@ -161,6 +161,15 @@ public class App {
       return null;
     });
 
+    post("/students/:id/changeMajor", (request, response) -> {
+      int id = Integer.parseInt(request.params("id"));
+      Student student = Student.find(id);
+      String name = request.queryParams("studentName");
+      String newMajor = request.queryParams("updateMajor");
+      student.update(name, newMajor);
+      response.redirect("/students/" + student.getId());
+      return null;
+    });
 
 
 

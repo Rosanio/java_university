@@ -87,14 +87,17 @@ public class Department {
   public void delete() {
     try(Connection con = DB.sql2o.open()) {
     String sql = "DELETE FROM departments WHERE id = :id;";
-      con.createQuery(sql)
-        .addParameter("id", id)
-        .executeUpdate();
+    con.createQuery(sql)
+      .addParameter("id", id)
+      .executeUpdate();
 
-    // String deleteQuery = "DELETE FROM students_departments WHERE course_id = :id";
-    //   con.createQuery(deleteQuery)
-    //     .addParameter("id", id)
-    //     .executeUpdate();
+    String deleteCoursesQuery = "DELETE FROM courses WHERE department_id = :id";
+    con.createQuery(deleteCoursesQuery)
+      .addParameter("id", id)
+      .executeUpdate();
+
+    String deleteStudentsQuery = "DELETE FROM students WHERE major = :name";
+    con.createQuery(deleteStudentsQuery).addParameter("name", name).executeUpdate();
     }
   }
 }
