@@ -80,4 +80,18 @@ public class StudentTest {
     myStudent.delete();
     assertEquals(myCourse.getStudents().size(), 0);
   }
+
+  @Test
+  public void completed_returnsFalseAtFirst() {
+    Course myCourse = new Course("HIST", 101, 1);
+    myCourse.save();
+
+    Student myStudent = new Student("Matt", "2010-08-15", "History");
+    myStudent.save();
+
+    myStudent.addCourse(myCourse);
+    myStudent.complete(myCourse);
+
+    assertEquals(true, myStudent.completed(myCourse));
+  }
 }

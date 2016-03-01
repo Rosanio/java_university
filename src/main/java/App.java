@@ -103,5 +103,66 @@ public class App {
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
+    post("/add_courses", (request, response) -> {
+      int studentId = Integer.parseInt(request.queryParams("student_id"));
+      int courseId = Integer.parseInt(request.queryParams("course_id"));
+      Course course = Course.find(courseId);
+      Student student = Student.find(studentId);
+      if(!student.getCourses().contains(course)) {
+        student.addCourse(course);
+      }
+      response.redirect("/students/" +studentId);
+      return null;
+    });
+
+    post("/students/:id/complete", (request, response) -> {
+      int studentId = Integer.parseInt(request.params(":id"));
+      int courseId = Integer.parseInt(request.queryParams("course_id"));
+      Course course = Course.find(courseId);
+      Student student = Student.find(studentId);
+      student.complete(course);
+      response.redirect("/students/" +studentId);
+      return null;
+    });
+
+    post("/add_students", (request, response) -> {
+      int studentId = Integer.parseInt(request.queryParams("student_id"));
+      int courseId = Integer.parseInt(request.queryParams("course_id"));
+      Course course = Course.find(courseId);
+      Student student = Student.find(studentId);
+      if(!course.getStudents().contains(student)) {
+        course.addStudent(student);
+      }
+      response.redirect("/courses/" +courseId);
+      return null;
+    });
+
+    post("/students/:id/delete", (request, response) -> {
+      int id = Integer.parseInt(request.params("id"));
+      Student student = Student.find(id);
+      student.delete();
+      response.redirect("/students");
+      return null;
+    });
+
+    post("/courses/:id/delete", (request, response) -> {
+      int id = Integer.parseInt(request.params("id"));
+      Course course = Course.find(id);
+      course.delete();
+      response.redirect("/courses");
+      return null;
+    });
+
+    post("/departments/:id/delete", (request, response) -> {
+      int id = Integer.parseInt(request.params("id"));
+      Department department = Department.find(id);
+      department.delete();
+      response.redirect("/departments");
+      return null;
+    });
+
+
+
+
   }
 }

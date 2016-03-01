@@ -71,7 +71,7 @@ public class Student {
 
   public void addCourse(Course course) {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO students_courses (course_id, student_id) VALUES (:course_id, :student_id)";
+      String sql = "INSERT INTO students_courses (course_id, student_id, completed) VALUES (:course_id, :student_id, false)";
       con.createQuery(sql)
       .addParameter("course_id", course.getId())
       .addParameter("student_id", id)
@@ -79,21 +79,22 @@ public class Student {
     }
   }
 
-  public ArrayList<Course> getCourses() {
+  public List<Course> getCourses() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "SELECT course_id FROM students_courses WHERE student_id=:id";
-      List<Integer> courseIds = con.createQuery(sql)
+      String sql = "SELECT courses.* FROM students JOIN students_courses ON (students.id = students_courses.student_id) JOIN courses ON (students_courses.course_id = courses.id) WHERE student_id=:id";
+      return con.createQuery(sql)
         .addParameter("id", id)
-        .executeAndFetch(Integer.class);
-      ArrayList<Course> myCourses = new ArrayList<Course>();
-      for(Integer courseId : courseIds) {
-        String courseQuery = "SELECT * FROM courses where id=:id";
-        Course course = con.createQuery(courseQuery)
-          .addParameter("id", courseId)
-          .executeAndFetchFirst(Course.class);
-          myCourses.add(course);
-      }
-    return myCourses;
+        .executeAndFetch(Course.class);
+    }
+  }
+
+
+  public List<Student> getStudents() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT students.* FROM courses JOIN students_courses ON (courses.id = students_courses.course_id) JOIN students ON (students_courses.student_id = students.id) WHERE course_id=:id";
+      return con.createQuery(sql)
+        .addParameter("id", id)
+        .executeAndFetch(Student.class);
     }
   }
 
@@ -103,6 +104,27 @@ public class Student {
       return con.createQuery(sql)
         .addParameter("major", major)
         .executeAndFetchFirst(Department.class);
+    }
+  }
+
+  public Boolean completed(Course course) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT completed FROM students_courses WHERE student_id = :student_id AND course_id = :course_id";
+      Boolean completed = con.createQuery(sql)
+        .addParameter("student_id", id)
+        .addParameter("course_id", course.getId())
+        .executeAndFetchFirst(Boolean.class);
+      return completed;
+    }
+  }
+
+  public void complete(Course course) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE students_courses SET completed = true WHERE student_id = :student_id AND course_id = :course_id";
+      con.createQuery(sql)
+        .addParameter("student_id", id)
+        .addParameter("course_id", course.getId())
+        .executeUpdate();
     }
   }
 

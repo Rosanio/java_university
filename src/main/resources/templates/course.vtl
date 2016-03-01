@@ -1,6 +1,6 @@
 <h1>$course.getName()</h1>
 
-<h4>Department: <a href="departments/$department.getId()">$department.getName()</a></h4>
+<h4>Department: <a href="/departments/$department.getId()">$department.getName()</a></h4>
 
 #if($course.getStudents())
   <p>Here are the students for this course:</p>
@@ -17,7 +17,7 @@
     <input id="course_id" name="course_id" type="hidden" value="$course.getId()">
     <label for="student_id">Select a student</label>
     <select id='student_id' name='student_id' type='number' required>
-      #foreach($student in $allStudents)
+      #foreach($student in $students)
         <option value="$student.getId()"> $student.getName() </option>
       #end
     </select>
